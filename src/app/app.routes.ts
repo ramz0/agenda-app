@@ -43,11 +43,7 @@ export const routes: Routes = [
         path: 'events',
         loadComponent: () => import('@modules/events/components/event-list.component').then(m => m.EventListComponent)
       },
-      {
-        path: 'events/:id',
-        loadComponent: () => import('@modules/events/components/event-detail.component').then(m => m.EventDetailComponent)
-      },
-      // Events - 'new' MUST come before ':id'
+      // Static routes MUST come before dynamic ':id' routes
       {
         path: 'events/new',
         loadComponent: () => import('@modules/events/components/event-form.component').then(m => m.EventFormComponent)
@@ -55,6 +51,10 @@ export const routes: Routes = [
       {
         path: 'events/:id/edit',
         loadComponent: () => import('@modules/events/components/event-form.component').then(m => m.EventFormComponent)
+      },
+      {
+        path: 'events/:id',
+        loadComponent: () => import('@modules/events/components/event-detail.component').then(m => m.EventDetailComponent)
       },
       // Teams routes (admin only)
       {
