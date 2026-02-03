@@ -1,0 +1,75 @@
+<div class="min-h-screen flex">
+  <!-- Left side - Form -->
+  <div class="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-slate-900">
+    <div class="max-w-md w-full">
+      <div class="text-center mb-8">
+        <a routerLink="/" class="inline-flex items-center gap-2 group">
+          <div class="w-12 h-12 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/25 group-hover:shadow-violet-500/40 transition">
+            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+        </a>
+        <h1 class="mt-4 text-2xl font-bold bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+          Agenda
+        </h1>
+        <p class="mt-2 text-slate-400">Gestiona tu tiempo de forma inteligente</p>
+      </div>
+      <div class="bg-slate-800/50 backdrop-blur rounded-2xl p-8 border border-slate-700/50">
+        <router-outlet />
+      </div>
+    </div>
+  </div>
+
+  <!-- Right side - Decorative -->
+  <div class="hidden lg:flex lg:flex-1 bg-gradient-to-br from-violet-600 via-violet-700 to-fuchsia-800 relative overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="absolute top-20 left-10 w-72 h-72 bg-violet-500/30 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-20 right-10 w-96 h-96 bg-fuchsia-500/30 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-white/10 rounded-full blur-2xl"></div>
+    </div>
+
+    <div class="relative flex flex-col items-center justify-center p-12 text-white">
+      <div class="max-w-md text-center">
+        <div class="w-24 h-24 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-8 backdrop-blur-sm">
+          <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h2 class="text-3xl font-bold mb-4">Organiza tu agenda</h2>
+        <p class="text-violet-100 text-lg mb-8">
+          Crea eventos, coordina equipos y mantente siempre al tanto de tus compromisos importantes.
+        </p>
+
+        <div class="space-y-4 text-left">
+          <div class="flex items-center gap-4 bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <span>Calendario visual e intuitivo</span>
+          </div>
+          <div class="flex items-center gap-4 bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <span>Gestión de equipos de trabajo</span>
+          </div>
+          <div class="flex items-center gap-4 bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <span>Notificaciones de asignaciones</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
