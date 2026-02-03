@@ -40,8 +40,12 @@ export const routes: Routes = [
         loadComponent: () => import('@modules/calendar/components/my-calendar.component').then(m => m.MyCalendarComponent)
       },
       {
-        path: 'assignments',
-        loadComponent: () => import('@modules/assignments/components/assignment-list.component').then(m => m.AssignmentListComponent)
+        path: 'events',
+        loadComponent: () => import('@modules/events/components/event-list.component').then(m => m.EventListComponent)
+      },
+      {
+        path: 'events/:id',
+        loadComponent: () => import('@modules/events/components/event-detail.component').then(m => m.EventDetailComponent)
       },
       // Events - 'new' MUST come before ':id'
       {

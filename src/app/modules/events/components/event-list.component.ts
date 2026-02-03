@@ -121,7 +121,7 @@ interface EventGroup {
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           @for (group of groupedEvents(); track group.key) {
             <a [routerLink]="['/events', group.firstEvent.id]"
-               class="group bg-slate-800/50 backdrop-blur rounded-2xl border border-slate-700/50 overflow-hidden hover:border-violet-500/50 hover:bg-slate-800/70 transition-all duration-300">
+               class="group relative bg-slate-800/50 backdrop-blur rounded-2xl border border-slate-700/50 overflow-hidden hover:border-violet-500/50 hover:bg-slate-800/70 transition-all duration-300">
               <!-- Color bar based on status -->
               <div [class]="getHeaderClass(group.status)"></div>
 
@@ -191,6 +191,16 @@ interface EventGroup {
                   </span>
                 </div>
               </div>
+              @if (authService.isAuthenticated()) {
+                <button
+                  (click)="confirmDelete($event, group)"
+                  class="absolute top-4 right-4 p-2 bg-slate-900/80 hover:bg-rose-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                  title="Eliminar">
+                  <svg class="w-4 h-4 text-slate-400 hover:text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              }
             </a>
           }
         </div>
@@ -390,5 +400,29 @@ export class EventListComponent implements OnInit {
       default:
         return 'px-2.5 py-1 bg-slate-500/20 text-slate-400 rounded-lg text-xs font-medium';
     }
+  }
+
+  confirmDelete(event: MouseEvent, group: EventGroup): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const count = group.events.length;
+    const message = count > 1
+      ? `¿Eliminar "${group.title}" y sus ${count} fechas?`
+      : `¿Eliminar "${group.title}"?`;
+
+    if (confirm(message)) {
+      this.deleteGroup(group);
+    }
+  }
+
+  deleteGroup(group: EventGroup): void {
+    const deletePromises = group.events.map(e =>
+      this.eventService.delete(e.id).toPromise()
+    );
+
+    Promise.all(deletePromises)
+      .then(() => this.loadEvents())
+      .catch(() => alert('Error al eliminar algunos eventos'));
   }
 }
