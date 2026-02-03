@@ -227,7 +227,7 @@ export class EventListComponent implements OnInit {
       if (groups.has(key)) {
         const group = groups.get(key)!;
         group.events.push(event);
-        group.totalParticipants += event.participantCount || event.participants?.length || 0;
+        // No sumar participantes - son los mismos en todas las instancias
       } else {
         groups.set(key, {
           key,
