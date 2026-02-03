@@ -227,7 +227,7 @@ export class EventListComponent implements OnInit {
       if (groups.has(key)) {
         const group = groups.get(key)!;
         group.events.push(event);
-        group.totalParticipants += event.participants?.length || 0;
+        group.totalParticipants += event.participantCount || event.participants?.length || 0;
       } else {
         groups.set(key, {
           key,
@@ -240,7 +240,7 @@ export class EventListComponent implements OnInit {
           capacity: event.capacity,
           events: [event],
           firstEvent: event,
-          totalParticipants: event.participants?.length || 0
+          totalParticipants: event.participantCount || event.participants?.length || 0
         });
       }
     }

@@ -23,6 +23,7 @@ export interface Event {
   teamId?: string;
   teamName?: string;
   participants?: EventParticipant[];
+  participantCount?: number;
   createdBy: string;
   createdAt: string;
   updatedAt: string;
