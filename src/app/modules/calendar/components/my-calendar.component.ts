@@ -54,15 +54,7 @@ interface CalendarDay {
           </div>
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 bg-emerald-500 rounded"></span>
-            <span class="text-slate-400">Equipo (aprobado)</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 bg-amber-500 rounded"></span>
-            <span class="text-slate-400">Equipo (pendiente)</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 bg-rose-500 rounded"></span>
-            <span class="text-slate-400">Equipo (rechazado)</span>
+            <span class="text-slate-400">Asignado</span>
           </div>
         </div>
 
@@ -240,20 +232,11 @@ export class MyCalendarComponent implements OnInit {
   }
 
   getEventClass(event: Event): { [key: string]: boolean } {
-    if (event.type === 'personal') {
+    if (event.type === 'personal' && !event.assignmentStatus) {
       return { 'bg-violet-500/30': true, 'text-violet-300': true, 'border-l-2': true, 'border-violet-500': true };
     }
-
-    switch (event.assignmentStatus) {
-      case 'approved':
-        return { 'bg-emerald-500/30': true, 'text-emerald-300': true, 'border-l-2': true, 'border-emerald-500': true };
-      case 'pending':
-        return { 'bg-amber-500/30': true, 'text-amber-300': true, 'border-l-2': true, 'border-amber-500': true };
-      case 'rejected':
-        return { 'bg-rose-500/30': true, 'text-rose-300': true, 'border-l-2': true, 'border-rose-500': true };
-      default:
-        return { 'bg-slate-500/30': true, 'text-slate-300': true, 'border-l-2': true, 'border-slate-500': true };
-    }
+    // Eventos asignados (team o personal con asignación)
+    return { 'bg-emerald-500/30': true, 'text-emerald-300': true, 'border-l-2': true, 'border-emerald-500': true };
   }
 
   getEventTitle(event: Event): string {
