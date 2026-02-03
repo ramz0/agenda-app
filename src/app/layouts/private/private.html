@@ -23,6 +23,11 @@
                class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/30 transition-all">
               Mi Agenda
             </a>
+            <a routerLink="/events" routerLinkActive="bg-slate-700/50 text-white"
+               [routerLinkActiveOptions]="{exact: true}"
+               class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/30 transition-all">
+              Agendados
+            </a>
             @if (authService.isAdmin()) {
               <a routerLink="/teams" routerLinkActive="bg-slate-700/50 text-white"
                  class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/30 transition-all">
