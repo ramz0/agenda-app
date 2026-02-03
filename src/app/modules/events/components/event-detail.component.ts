@@ -66,28 +66,93 @@ import { Event } from '@models/index';
 
           <!-- Participants Section -->
           @if (event()!.participants && event()!.participants!.length > 0) {
-            <div class="mb-6">
-              <h3 class="font-semibold text-lg text-white mb-4 flex items-center gap-2">
-                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-                Participantes ({{ event()!.participants!.length }})
-              </h3>
-              <div class="flex flex-wrap gap-3">
-                @for (participant of event()!.participants!; track participant.userId) {
-                  <div class="flex items-center gap-3 px-4 py-3 bg-slate-700/30 rounded-xl">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-medium">
-                      {{ (participant.userName || 'U').charAt(0).toUpperCase() }}
+            <div class="mb-6 space-y-6">
+              <!-- Ponentes -->
+              @if (getSpeakers().length > 0) {
+                <div>
+                  <h3 class="font-semibold text-lg text-white mb-4 flex items-center gap-2">
+                    <div class="w-8 h-8 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                      <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                      </svg>
                     </div>
-                    <div>
-                      <p class="font-medium text-white">{{ participant.userName || 'Usuario' }}</p>
-                      @if (participant.userEmail) {
-                        <p class="text-sm text-slate-400">{{ participant.userEmail }}</p>
-                      }
-                    </div>
+                    Ponentes ({{ getSpeakers().length }})
+                  </h3>
+                  <div class="flex flex-wrap gap-3">
+                    @for (participant of getSpeakers(); track participant.userId) {
+                      <div class="flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white font-medium">
+                          {{ (participant.userName || 'U').charAt(0).toUpperCase() }}
+                        </div>
+                        <div>
+                          <p class="font-medium text-white">{{ participant.userName || 'Usuario' }}</p>
+                          @if (participant.userEmail) {
+                            <p class="text-sm text-slate-400">{{ participant.userEmail }}</p>
+                          }
+                        </div>
+                      </div>
+                    }
                   </div>
-                }
-              </div>
+                </div>
+              }
+
+              <!-- Asistentes -->
+              @if (getAssistants().length > 0) {
+                <div>
+                  <h3 class="font-semibold text-lg text-white mb-4 flex items-center gap-2">
+                    <div class="w-8 h-8 bg-violet-500/20 rounded-lg flex items-center justify-center">
+                      <svg class="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                      </svg>
+                    </div>
+                    Asistentes ({{ getAssistants().length }})
+                  </h3>
+                  <div class="flex flex-wrap gap-3">
+                    @for (participant of getAssistants(); track participant.userId) {
+                      <div class="flex items-center gap-3 px-4 py-3 bg-violet-500/10 border border-violet-500/20 rounded-xl">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center text-white font-medium">
+                          {{ (participant.userName || 'U').charAt(0).toUpperCase() }}
+                        </div>
+                        <div>
+                          <p class="font-medium text-white">{{ participant.userName || 'Usuario' }}</p>
+                          @if (participant.userEmail) {
+                            <p class="text-sm text-slate-400">{{ participant.userEmail }}</p>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Participantes -->
+              @if (getParticipants().length > 0) {
+                <div>
+                  <h3 class="font-semibold text-lg text-white mb-4 flex items-center gap-2">
+                    <div class="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+                      <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      </svg>
+                    </div>
+                    Participantes ({{ getParticipants().length }})
+                  </h3>
+                  <div class="flex flex-wrap gap-3">
+                    @for (participant of getParticipants(); track participant.userId) {
+                      <div class="flex items-center gap-3 px-4 py-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-medium">
+                          {{ (participant.userName || 'U').charAt(0).toUpperCase() }}
+                        </div>
+                        <div>
+                          <p class="font-medium text-white">{{ participant.userName || 'Usuario' }}</p>
+                          @if (participant.userEmail) {
+                            <p class="text-sm text-slate-400">{{ participant.userEmail }}</p>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
             </div>
           }
 
@@ -132,7 +197,20 @@ import { Event } from '@models/index';
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                   </div>
-                  <span>{{ event()!.participants?.length || 0 }} participantes</span>
+                  <div class="flex flex-wrap gap-2 text-sm">
+                    @if (getSpeakers().length > 0) {
+                      <span class="text-amber-400">{{ getSpeakers().length }} ponente{{ getSpeakers().length > 1 ? 's' : '' }}</span>
+                    }
+                    @if (getAssistants().length > 0) {
+                      <span class="text-violet-400">{{ getAssistants().length }} asistente{{ getAssistants().length > 1 ? 's' : '' }}</span>
+                    }
+                    @if (getParticipants().length > 0) {
+                      <span class="text-cyan-400">{{ getParticipants().length }} participante{{ getParticipants().length > 1 ? 's' : '' }}</span>
+                    }
+                    @if (!event()!.participants?.length) {
+                      <span class="text-slate-400">Sin participantes</span>
+                    }
+                  </div>
                 </div>
               </div>
             </div>
@@ -228,5 +306,17 @@ export class EventDetailComponent implements OnInit {
     }
     // Handle simple time format (e.g., "12:00")
     return time.substring(0, 5);
+  }
+
+  getSpeakers() {
+    return this.event()?.participants?.filter(p => p.role === 'speaker') || [];
+  }
+
+  getAssistants() {
+    return this.event()?.participants?.filter(p => p.role === 'attendee') || [];
+  }
+
+  getParticipants() {
+    return this.event()?.participants?.filter(p => p.role === 'participant' || !p.role) || [];
   }
 }

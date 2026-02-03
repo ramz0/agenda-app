@@ -24,6 +24,15 @@ interface WeekDay {
   name: string;
 }
 
+type ParticipantRole = 'speaker' | 'attendee' | 'participant';
+
+interface SelectedParticipant {
+  id: string;
+  name: string;
+  email: string;
+  role: ParticipantRole;
+}
+
 @Component({
   selector: 'app-event-form',
   standalone: true,
@@ -323,25 +332,8 @@ interface WeekDay {
                 </div>
               </div>
 
-              <!-- Status & Capacity Row -->
-              <div class="flex gap-4">
-                <div class="flex-1 p-4 bg-slate-800/50 rounded-xl">
-                  <label class="block text-sm text-slate-400 mb-2">Estado</label>
-                  <div class="flex rounded-lg overflow-hidden">
-                    <button type="button" (click)="form.get('status')?.setValue('draft')"
-                            class="flex-1 py-2 text-sm font-medium transition-all"
-                            [class]="form.get('status')?.value === 'draft' ? 'bg-amber-500 text-white' : 'bg-slate-700 text-slate-400'">
-                      Borrador
-                    </button>
-                    <button type="button" (click)="form.get('status')?.setValue('published')"
-                            class="flex-1 py-2 text-sm font-medium transition-all"
-                            [class]="form.get('status')?.value === 'published' ? 'bg-emerald-500 text-white' : 'bg-slate-700 text-slate-400'">
-                      Publicar
-                    </button>
-                  </div>
-                </div>
-
-                <div class="flex-1 p-4 bg-slate-800/50 rounded-xl">
+              <!-- Capacity -->
+              <div class="p-4 bg-slate-800/50 rounded-xl">
                   <label class="block text-sm text-slate-400 mb-2">Capacidad</label>
                   <div class="flex items-center justify-center gap-4">
                     <button type="button" (click)="decrementCapacity()"
@@ -358,7 +350,6 @@ interface WeekDay {
                       </svg>
                     </button>
                   </div>
-                </div>
               </div>
 
               <!-- Participants Section -->
@@ -387,6 +378,20 @@ interface WeekDay {
 
                 @if (showParticipantsSection()) {
                   <div class="mt-4 space-y-3 animate-fadeIn">
+                    <!-- Role Selector -->
+                    <div class="flex gap-2 mb-3">
+                      <span class="text-xs text-slate-400 self-center">Agregar como:</span>
+                      @for (role of participantRoles; track role.value) {
+                        <button type="button" (click)="selectedRole.set(role.value)"
+                                class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                                [class]="selectedRole() === role.value
+                                  ? (role.value === 'speaker' ? 'bg-amber-500 text-white' : role.value === 'attendee' ? 'bg-violet-500 text-white' : 'bg-cyan-500 text-white')
+                                  : 'bg-slate-700 text-slate-400 hover:bg-slate-600'">
+                          {{ role.label }}
+                        </button>
+                      }
+                    </div>
+
                     <!-- Search Users -->
                     <div class="relative">
                       <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -440,13 +445,26 @@ interface WeekDay {
                     @if (selectedParticipants().length > 0) {
                       <div class="space-y-2">
                         <p class="text-xs text-slate-400 font-medium">Participantes seleccionados:</p>
-                        <div class="flex flex-wrap gap-2">
-                          @for (user of selectedParticipants(); track user.id) {
-                            <div class="flex items-center gap-2 px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded-full">
-                              <span class="text-sm text-cyan-300">{{ user.name }}</span>
-                              <button type="button" (click)="removeParticipant(user.id)"
-                                      class="hover:text-white transition">
-                                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="space-y-2">
+                          @for (participant of selectedParticipants(); track participant.id) {
+                            <div class="flex items-center gap-3 p-2 bg-slate-700/50 rounded-lg">
+                              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
+                                {{ participant.name.charAt(0).toUpperCase() }}
+                              </div>
+                              <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-white truncate">{{ participant.name }}</p>
+                              </div>
+                              <select (change)="updateParticipantRole(participant.id, $any($event.target).value)"
+                                      [value]="participant.role"
+                                      class="bg-slate-600 border-0 rounded-lg px-2 py-1 text-xs focus:ring-1 focus:ring-cyan-500"
+                                      [class]="participant.role === 'speaker' ? 'text-amber-400' : participant.role === 'attendee' ? 'text-violet-400' : 'text-cyan-400'">
+                                <option value="speaker">Ponente</option>
+                                <option value="attendee">Asistente</option>
+                                <option value="participant">Participante</option>
+                              </select>
+                              <button type="button" (click)="removeParticipant(participant.id)"
+                                      class="text-slate-400 hover:text-red-400 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
                               </button>
@@ -486,11 +504,16 @@ interface WeekDay {
                       <p class="text-slate-500 text-sm mt-2 line-clamp-2">{{ form.get('description')?.value }}</p>
                     }
                     @if (selectedParticipants().length > 0) {
-                      <div class="flex items-center gap-2 mt-2">
-                        <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                        <span class="text-cyan-400 text-sm">{{ selectedParticipants().length }} participante{{ selectedParticipants().length > 1 ? 's' : '' }}</span>
+                      <div class="flex flex-wrap items-center gap-3 mt-2 text-sm">
+                        @if (getSpeakersCount() > 0) {
+                          <span class="text-amber-400">{{ getSpeakersCount() }} ponente{{ getSpeakersCount() > 1 ? 's' : '' }}</span>
+                        }
+                        @if (getAssistantsCount() > 0) {
+                          <span class="text-violet-400">{{ getAssistantsCount() }} asistente{{ getAssistantsCount() > 1 ? 's' : '' }}</span>
+                        }
+                        @if (getParticipantsCount() > 0) {
+                          <span class="text-cyan-400">{{ getParticipantsCount() }} participante{{ getParticipantsCount() > 1 ? 's' : '' }}</span>
+                        }
                       </div>
                     }
                   </div>
@@ -557,10 +580,17 @@ export class EventFormComponent implements OnInit {
 
   // Participants
   showParticipantsSection = signal(false);
-  selectedParticipants = signal<User[]>([]);
+  selectedParticipants = signal<SelectedParticipant[]>([]);
+  selectedRole = signal<ParticipantRole>('participant');
   userSearchQuery = '';
   userSearchResults = signal<User[]>([]);
   searchingUsers = signal(false);
+
+  participantRoles: { value: ParticipantRole; label: string }[] = [
+    { value: 'speaker', label: 'Ponente' },
+    { value: 'attendee', label: 'Asistente' },
+    { value: 'participant', label: 'Participante' }
+  ];
 
   templates: EventTemplate[] = [
     { id: 'meeting', name: 'Reunión', icon: '👥', color: '#8B5CF6', bgColor: 'rgba(139, 92, 246, 0.2)', duration: 60, description: 'Junta con tu equipo' },
@@ -621,7 +651,7 @@ export class EventFormComponent implements OnInit {
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       capacity: [null],
-      status: ['draft'],
+      status: ['published'],
       type: ['personal'],
       teamId: ['']
     });
@@ -696,14 +726,13 @@ export class EventFormComponent implements OnInit {
         });
         // Load participants if available
         if (event.participants && event.participants.length > 0) {
-          const users: User[] = event.participants.map(p => ({
+          const participants: SelectedParticipant[] = event.participants.map(p => ({
             id: p.userId,
             name: p.userName || 'Usuario',
             email: p.userEmail || '',
-            role: 'user' as const,
-            createdAt: ''
+            role: p.role || 'participant'
           }));
-          this.selectedParticipants.set(users);
+          this.selectedParticipants.set(participants);
           this.showParticipantsSection.set(true);
         }
       },
@@ -810,9 +839,21 @@ export class EventFormComponent implements OnInit {
 
   addParticipant(user: User): void {
     if (this.isUserSelected(user.id)) return;
-    this.selectedParticipants.update(list => [...list, user]);
+    const participant: SelectedParticipant = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: this.selectedRole()
+    };
+    this.selectedParticipants.update(list => [...list, participant]);
     this.userSearchQuery = '';
     this.userSearchResults.set([]);
+  }
+
+  updateParticipantRole(userId: string, role: ParticipantRole): void {
+    this.selectedParticipants.update(list =>
+      list.map(p => p.id === userId ? { ...p, role } : p)
+    );
   }
 
   removeParticipant(userId: string): void {
@@ -895,6 +936,18 @@ export class EventFormComponent implements OnInit {
     return valid;
   }
 
+  getSpeakersCount(): number {
+    return this.selectedParticipants().filter(p => p.role === 'speaker').length;
+  }
+
+  getAssistantsCount(): number {
+    return this.selectedParticipants().filter(p => p.role === 'attendee').length;
+  }
+
+  getParticipantsCount(): number {
+    return this.selectedParticipants().filter(p => p.role === 'participant').length;
+  }
+
   goBack(): void {
     this.router.navigate(['/dashboard']);
   }
@@ -909,7 +962,10 @@ export class EventFormComponent implements OnInit {
     if (!baseData.capacity) delete baseData.capacity;
     if (!baseData.teamId) delete baseData.teamId;
     if (this.selectedParticipants().length > 0) {
-      baseData.participantIds = this.selectedParticipants().map(u => u.id);
+      baseData.participants = this.selectedParticipants().map(p => ({
+        userId: p.id,
+        role: p.role
+      }));
     }
 
     if (this.recurrenceEnabled()) {

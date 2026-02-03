@@ -2,11 +2,18 @@ import { AssignmentStatus } from './assignment.model';
 
 export type EventStatus = 'draft' | 'published' | 'cancelled';
 export type EventType = 'personal' | 'team';
+export type ParticipantRole = 'speaker' | 'attendee' | 'participant';
 
 export interface EventParticipant {
   userId: string;
   userName?: string;
   userEmail?: string;
+  role: ParticipantRole;
+}
+
+export interface ParticipantInput {
+  userId: string;
+  role: ParticipantRole;
 }
 
 export interface Event {
@@ -42,7 +49,7 @@ export interface CreateEventRequest {
   status?: EventStatus;
   type?: EventType;
   teamId?: string;
-  participantIds?: string[];
+  participants?: ParticipantInput[];
 }
 
 export interface UpdateEventRequest {
@@ -56,5 +63,5 @@ export interface UpdateEventRequest {
   status?: EventStatus;
   type?: EventType;
   teamId?: string;
-  participantIds?: string[];
+  participants?: ParticipantInput[];
 }
