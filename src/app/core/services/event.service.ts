@@ -7,7 +7,7 @@ import { Event, CreateEventRequest, UpdateEventRequest, EventStatus } from '../.
   providedIn: 'root'
 })
 export class EventService {
-  private readonly API_URL = 'http://localhost:8080/api';
+  private readonly API_URL = 'https://agenda-api-production-96e1.up.railway.app/api';
 
   constructor(private http: HttpClient) {}
 

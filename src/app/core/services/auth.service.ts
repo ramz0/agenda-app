@@ -8,7 +8,7 @@ import { User, LoginRequest, RegisterRequest, AuthResponse, Role } from '../../m
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:8080/api';
+  private readonly API_URL = 'https://agenda-api-production-96e1.up.railway.app/api';
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'auth_user';
 

@@ -13,7 +13,7 @@ import {
   providedIn: 'root'
 })
 export class AssignmentService {
-  private readonly API_URL = 'http://localhost:8080/api';
+  private readonly API_URL = 'https://agenda-api-production-96e1.up.railway.app/api';
 
   private _pendingCount = signal<number>(0);
   pendingCount = this._pendingCount.asReadonly();
